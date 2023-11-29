@@ -1,0 +1,1 @@
+0:0:0:0:0:0:0:1 - - [29/Nov/2023:00:02:03 -0500] "GET /inventarios-1.0.0/rest/proveedores/buscar/sa HTTP/1.1" 200 307

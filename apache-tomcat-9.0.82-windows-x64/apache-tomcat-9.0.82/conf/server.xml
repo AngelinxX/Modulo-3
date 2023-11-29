@@ -57,6 +57,20 @@
       maxIdle="20" 
       minIdle="5" 
       maxWait="10000"/>
+	  
+	  <Resource name="jdbc/ConexionInventario" 
+      global="jdbc/ConexionInventario" 
+      auth="Container" 
+      type="javax.sql.DataSource" 
+      driverClassName="org.postgresql.Driver" 
+      url="jdbc:postgresql://localhost:5432/inventario" 
+      username="postgres" 
+      password="Ceydis.159783" 
+      
+      maxActive="100" 
+      maxIdle="20" 
+      minIdle="5" 
+      maxWait="10000"/>
   </GlobalNamingResources>
 
   <!-- A "Service" is a collection of one or more "Connectors" that share
