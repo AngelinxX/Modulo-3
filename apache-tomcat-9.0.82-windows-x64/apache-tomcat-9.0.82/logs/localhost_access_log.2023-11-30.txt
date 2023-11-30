@@ -1,0 +1,2 @@
+0:0:0:0:0:0:0:1 - - [30/Nov/2023:08:18:27 -0500] "POST /inventarios-1.0.0/rest/proveedores/crear HTTP/1.1" 200 -
+0:0:0:0:0:0:0:1 - - [30/Nov/2023:08:18:36 -0500] "GET /inventarios-1.0.0/rest/proveedores/buscar/sa HTTP/1.1" 200 597
