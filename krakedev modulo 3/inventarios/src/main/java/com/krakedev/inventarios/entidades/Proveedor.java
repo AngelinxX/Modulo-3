@@ -7,7 +7,7 @@ public class Proveedor {
 	private int telefono;
 	private String correo;
 	private String direccion;
-	
+
 	public Proveedor() {
 	}
 	

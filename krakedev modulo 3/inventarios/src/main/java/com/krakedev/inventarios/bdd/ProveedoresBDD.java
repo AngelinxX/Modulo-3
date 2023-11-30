@@ -10,8 +10,6 @@ import com.krakedev.inventarios.entidades.Proveedor;
 import com.krakedev.inventarios.excepciones.KrakeDevException;
 import com.krakedev.inventarios.utils.ConexionBDD;
 
-
-
 public class ProveedoresBDD {
 	public ArrayList<Proveedor> buscar(String subcadena) throws KrakeDevException {
 		ArrayList<Proveedor> proveedores = new ArrayList<Proveedor>();
