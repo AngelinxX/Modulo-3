@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -71,6 +72,10 @@ public class PedidosBDD {
 		Connection con = null;
 		PreparedStatement ps = null;
 		PreparedStatement psDet = null;
+		PreparedStatement psStock = null;
+		
+		Date fechaActual = new Date();
+		Timestamp fechaHoraActual = new Timestamp(fechaActual.getTime());
 
 		try {
 			con = ConexionBDD.obtenerConexion();
@@ -95,6 +100,17 @@ public class PedidosBDD {
 				psDet.setInt(4, det.getProducto().getCodigoprod());
 
 				psDet.executeUpdate();
+				
+				psStock=con.prepareStatement("INSERT INTO historial_stock "
+						+ "(fecha, referencia, producto, cantidad)	 "
+						+ "VALUES (?, ?, ?, ?)");
+				
+				psStock.setTimestamp(1, fechaHoraActual);
+				psStock.setString(2, "PEDIDO " + pedido.getNumero());
+				psStock.setInt(3, det.getProducto().getCodigoprod());
+				psStock.setInt(4, det.getCantidadRecibida());
+				
+				psStock.executeUpdate();
 			}
 		} catch (KrakeDevException e) {
 			e.printStackTrace();

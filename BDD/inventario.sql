@@ -219,3 +219,25 @@ insert into detalle_ventas(cabecera_ventas,producto,cantidad,precio,subtotal,sub
 values (1,4,1,0.04,0.36,0.40);
 
 select * from detalle_ventas;
+
+drop table if exists historial_stock;
+create table historial_stock(
+	codigo serial not null,
+	fecha timestamp,
+	referencia varchar (20),
+	producto int,
+	cantidad int,
+	constraint historial_stock_pk primary key (codigo)
+);
+insert into historial_stock(fecha,referencia,producto,cantidad)
+values ('20/11/2023 19:59','PEDIDO 1',1,100);
+insert into historial_stock(fecha,referencia,producto,cantidad)
+values ('20/11/2023 19:59','PEDIDO 1',4,50);
+insert into historial_stock(fecha,referencia,producto,cantidad)
+values ('20/11/2023 20:00','PEDIDO 2',4,10);
+insert into historial_stock(fecha,referencia,producto,cantidad)
+values ('20/11/2023 20:00','VENTA 1',1,-5);
+insert into historial_stock(fecha,referencia,producto,cantidad)
+values ('20/11/2023 20:00','VENTA 1',4,1);
+
+select * from historial_stock;
