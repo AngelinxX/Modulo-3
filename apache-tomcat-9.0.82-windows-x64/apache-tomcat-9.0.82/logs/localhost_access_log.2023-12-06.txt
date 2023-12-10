@@ -1,2 +1,0 @@
-0:0:0:0:0:0:0:1 - - [06/Dec/2023:00:28:06 -0500] "PUT /inventarios-1.0.0/rest/pedidos/recibir HTTP/1.1" 405 653
-0:0:0:0:0:0:0:1 - - [06/Dec/2023:00:31:47 -0500] "PUT /inventarios-1.0.0/rest/pedidos/recibir HTTP/1.1" 200 -
