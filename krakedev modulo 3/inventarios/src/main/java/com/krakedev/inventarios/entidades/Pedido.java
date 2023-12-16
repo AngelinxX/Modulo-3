@@ -1,6 +1,6 @@
 package com.krakedev.inventarios.entidades;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class Pedido {
@@ -11,6 +11,10 @@ public class Pedido {
 	
 	private ArrayList<DetallePedido> detalles;
 	
+	public Pedido(Date fecha) {
+		super();
+		this.fecha = fecha;
+	}
 	public Pedido() {
 		super();
 	}

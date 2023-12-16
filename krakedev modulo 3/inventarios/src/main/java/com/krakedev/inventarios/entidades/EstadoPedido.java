@@ -4,6 +4,10 @@ public class EstadoPedido {
 	private String codigoEstadoPedido;
 	private String descripcion;
 	
+	public EstadoPedido(String codigoEstadoPedido) {
+		super();
+		this.codigoEstadoPedido = codigoEstadoPedido;
+	}
 	public EstadoPedido() {
 		super();
 	}

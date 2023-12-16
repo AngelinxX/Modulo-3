@@ -8,6 +8,10 @@ public class Proveedor {
 	private String correo;
 	private String direccion;
 	
+	public Proveedor(String identificador) {
+		super();
+		this.identificador = identificador;
+	}
 	public Proveedor() {
 		super();
 	}

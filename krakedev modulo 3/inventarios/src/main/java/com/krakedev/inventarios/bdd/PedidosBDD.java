@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.krakedev.inventarios.entidades.DetallePedido;
+import com.krakedev.inventarios.entidades.EstadoPedido;
 import com.krakedev.inventarios.entidades.Pedido;
+import com.krakedev.inventarios.entidades.Proveedor;
 import com.krakedev.inventarios.excepciones.KrakeDevException;
 import com.krakedev.inventarios.utils.ConexionBDD;
 
@@ -119,5 +121,47 @@ public class PedidosBDD {
 			e.printStackTrace();
 			throw new KrakeDevException("Error al consultar, detalle:" + e.getMessage());
 		}
+	}
+	
+	public ArrayList<Pedido> buscar(String subcadena) throws KrakeDevException {
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Pedido pedido = null;
+		try {
+			con = ConexionBDD.obtenerConexion();
+			ps = con.prepareStatement("SELECT numero, proveedor, fecha, estado"
+					+ "	FROM cabecera_pedido"
+					+ "	where proveedor like ?");
+			ps.setString(1, subcadena.toUpperCase());
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int Numero = rs.getInt("numero");
+				String proveedor = rs.getString("proveedor");
+				Date Fecha = rs.getDate("fecha");
+				String estado = rs.getString("estado");
+				
+				Proveedor pr = new Proveedor(proveedor);
+				EstadoPedido ep = new EstadoPedido(estado);
+				
+				pedido = new Pedido();
+				pedido.setNumero(Numero);
+				pedido.setProveedor(pr);
+				pedido.setFecha(Fecha);
+				pedido.setEstado(ep);
+
+				pedidos.add(pedido);
+			}
+
+		} catch (KrakeDevException e) {
+			e.printStackTrace();
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new KrakeDevException("Error al consultar, detalle:" + e.getMessage());
+		}
+		return pedidos;
 	}
 }
