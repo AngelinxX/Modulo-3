@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Button, FlatList, TextInput, ScrollView } from 'react-native';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert,TouchableHighlight, Modal } from 'react-native';
 
 let productos = [
   { nombre: 'Arroz', categoria: 'Granos', precioCompra: '0.35', precioVenta: '0.45', id: '100' },
@@ -15,6 +15,9 @@ let esNuevo = true;
 let indiceSeleccionado = -1;
 
 export default function App() {
+
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [txtNombre, setTxtNombre] = useState();
   const [txtCategoria, setTxtCategoria] = useState();
   const [txtPrecioCompra, setTxtPrecioCompra] = useState();
@@ -23,6 +26,15 @@ export default function App() {
   const [numProducto, setNumProducto] = useState(productos.length);
 
   let ItemProducto = (props) => {
+    let cambio = () => {
+      setTxtNombre(props.producto.nombre);
+      setTxtCategoria(props.producto.categoria);
+      setTxtPrecioCompra(props.producto.precioCompra);
+      setTxtId(props.producto.id);
+      setTxtPrecioVenta(props.producto.precioVenta);
+      esNuevo = false;
+      indiceSeleccionado = props.indice;
+    }
     return (
       <View style={styles.contenidoProd}>
         <View style={styles.indiceProd}>
@@ -35,29 +47,55 @@ export default function App() {
         <View style={styles.precioProd}>
           <Text>$ {props.producto.precioVenta}</Text>
         </View>
+        <Modal
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Esta seguro que quieres eliminar?</Text>
+              <View style={styles.areaBotones}>
+                <Button
+                  title='Aceptar'
+                  color='grey'
+                  onPress={() => {
+                    productos.splice(indiceSeleccionado, 1);
+                    setNumProducto(productos.length);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text>Aceptar</Text>
+                </Button>
+                <Button
+                  title='Cancelar'
+                  color='grey'
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text>Cancelar</Text>
+                </Button>
+              </View>
+            </View>
+          </View>
+        </Modal>
         <View style={styles.botonesProd}>
-          <Button
-            title='E'
-            color="lightseagreen"
-            onPress={() => {
-              setTxtNombre(props.producto.nombre);
-              setTxtCategoria(props.producto.categoria);
-              setTxtPrecioCompra(props.producto.precioCompra);
-              setTxtId(props.producto.id);
-              setTxtPrecioVenta(props.producto.precioVenta);
-              esNuevo = false;
-              indiceSeleccionado = props.indice;
-              console.log("arreglo", indiceSeleccionado);
-            }}
-          />
+          <TouchableHighlight
+            activeOpacity={0.6}
+            onPress={cambio}>
+            <View style={styles.button}>
+              <Text>E</Text>
+            </View>
+          </TouchableHighlight>
           <Button
             title='X'
             color="lightcoral"
             onPress={() => {
+              setModalVisible(true);
               indiceSeleccionado = props.indice;
-              productos.splice(indiceSeleccionado, 1);
-              setNumProducto(productos.length);
-              console.log("arreglo", indiceSeleccionado);
             }}
           />
         </View>
@@ -133,7 +171,7 @@ export default function App() {
               style={styles.cajaIngreso}
               value={txtPrecioCompra}
               placeholder='PRECIO DE COMPRA'
-              onChangeText={(txtPrecioCompra) => {
+              onChangeText={txtPrecioCompra => {
                 let precioDeVenta = () => {
                   compra = parseFloat(txtPrecioCompra);
                   venta = compra * 1.20;
@@ -178,7 +216,7 @@ export default function App() {
             renderItem={(elemento) => {
               return <ItemProducto indice={elemento.index} producto={elemento.item} />
             }}
-            keyExtractor={(item) => {
+            keyExtractor={item => {
               return item.id;
             }}
           />
@@ -263,6 +301,36 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     paddingTop: 20
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 8,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 
 

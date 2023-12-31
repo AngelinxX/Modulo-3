@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { FlatList } from 'react-native';
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, TouchableHighlight, Modal } from 'react-native';
 
 let personas = [
   { nombre: 'Thor', apellido: 'Thillas', cedula: '0242342342' },
@@ -14,42 +14,87 @@ let esNuevo = true;
 let indiceSeleccionado = -1;
 
 export default function App() {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [txtCedula, setTextCedula] = useState();
   const [txtNombre, setTextNombre] = useState();
   const [txtApellida, setTextApellido] = useState();
   const [numElemento, setNumElemento] = useState(personas.length);
 
-  let ItemPersona = (props) => {
+  
+
+  let ItemPersona = ({ indice, persona }) => {
+    
+    let cambio = () => {
+      setTextCedula(persona.cedula);
+      setTextNombre(persona.nombre);
+      setTextApellido(persona.apellido);
+      esNuevo = false;
+      indiceSeleccionado = indice;
+    }
+
     return (
       <View style={styles.itemPersona}>
+        
+
         <View style={styles.itemIndice}>
-          <Text style={styles.textoSecundario}> {props.indice}</Text>
+          <Text style={styles.textoSecundario}> {indice}</Text>
         </View>
         <View style={styles.itemContenido}>
-          <Text style={styles.textoPrincipal}>{props.persona.nombre} {props.persona.apellido}</Text>
-          <Text style={styles.textoSecundario}>{props.persona.cedula}</Text>
+          <Text style={styles.textoPrincipal}>{persona.nombre} {persona.apellido}</Text>
+          <Text style={styles.textoSecundario}>{persona.cedula}</Text>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Esta seguro que quieres eliminar?</Text>
+              <View style={styles.areaBotones}>
+                <Button
+                  title='Aceptar'
+                  color='grey'
+                  onPress={() => {
+                    personas.splice(indiceSeleccionado, 1);
+                    setNumElemento(personas.length);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text>Aceptar</Text>
+                </Button>
+                <Button
+                  title='Cancelar'
+                  color='grey'
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text>Cancelar</Text>
+                </Button>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
         <View style={styles.itemBotones}>
-          <Button
-            title='E'
-            color="lightseagreen"
-            onPress={() => {
-              setTextCedula(props.persona.cedula);
-              setTextNombre(props.persona.nombre);
-              setTextApellido(props.persona.apellido);
-              esNuevo = false;
-              indiceSeleccionado = props.indice;
-              console.log("arreglo persona", indiceSeleccionado);
-            }}
-          />
+          <TouchableHighlight
+            activeOpacity={0.6}
+            onPress={cambio}>
+            <View style={styles.button}>
+              <Text>E</Text>
+            </View>
+          </TouchableHighlight>
           <Button
             title='X'
             color="lightcoral"
             onPress={() => {
-              indiceSeleccionado = props.indice;
-              personas.splice(indiceSeleccionado, 1);
-              console.log("arreglo persona", personas);
-              setNumElemento(personas.length);
+              setModalVisible(true);
+              indiceSeleccionado = indice;
             }}
           />
         </View>
@@ -131,12 +176,12 @@ export default function App() {
         <FlatList // crea una lista segun la informacion recibida
           style={styles.lista}
           data={personas} //contiene el array de toda la informacion
-          renderItem={(obj) => { //es una funcion que devuelve una vista o componente que renderiza la celda  
-            return <ItemPersona indice={obj.index} persona={obj.item} />
+          renderItem={({ index, item }) => { //es una funcion que devuelve una vista o componente que renderiza la celda  
+            return <ItemPersona indice={index} persona={item} />
           }}
-          keyExtractor={(item) => {// retornar un item que no se repita
-            return item.cedula;
-          }}
+          keyExtractor={item => // retornar un item que no se repita
+            item.cedula
+          }
         />
       </View>
       <View style={styles.areaPie}>
@@ -218,6 +263,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 5
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 8,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   }
 
 });
