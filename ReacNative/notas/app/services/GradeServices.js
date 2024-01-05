@@ -14,7 +14,6 @@ export const updateGrade = (nota) => {
     if (gradeRetrieved != null) {
         gradeRetrieved.grade = nota.grade;
     }
-    console.log("arreglo")
 }
 const find = (subject) => {
     for (let i = 0; i < grades.length; i++) {
